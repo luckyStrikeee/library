@@ -3,22 +3,32 @@ import ItemUpdate from './ItemUpdate'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Badge from 'react-bootstrap/Badge'
+import './CardDisplay.css'
 
 function CardDisplay(props) {
     const [updateClicked, setupdateClicked] = useState(0)
     let updateInput
     
     if (updateClicked) {
-        updateInput = <ItemUpdate title={props.title} id={props.id} onUpdate={props.onUpdate} onCancel={setupdateClicked}></ItemUpdate>
+        updateInput = <ItemUpdate 
+        title={props.title} 
+        id={props.id} 
+        onUpdate={props.onUpdate} 
+        onCancel={setupdateClicked}
+        >
+        
+
+        </ItemUpdate>
     }
     else {
         updateInput = null
     }
 
     return (
-        <div className="col-sm-6 mx-auto">
+        <div className="cardDiv">
             <Card>
             {/* <Card.Header>{props.type}</Card.Header> */}
+            
             <Card.Body>
                 <Card.Title>{props.title} <Badge pill variant="warning">{props.type}</Badge></Card.Title>
                 {/* <Card.Text>

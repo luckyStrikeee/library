@@ -1,20 +1,21 @@
 import React, { useState , useEffect} from 'react'
-import ListDisplay from './listDisplay'
 import Button from 'react-bootstrap/Button'
 import ItemInput from './ItemInput'
 import CardDisplay from './CardDisplay'
+import Spinner from 'react-bootstrap/Spinner'
+import './Home.css'
 
 
 function Home() {
     
     const [getList, setgetList] = useState(1)
-    const [dataFromServer, setdataFromServer] = useState([{}])
+    const [dataFromServer, setdataFromServer] = useState(null)
     const [input, setinput] = useState('')
     const [newItem,setnewItem] = useState(null)
     const [updateItem,setupdateItem] = useState(null)
     const [deleteItem, setdeleteItem] = useState(null)
+    const [loading, setloading] = useState(0)
     let user = 'myUser'
-    let dis = 'disabled'
 
     useEffect(() => {
         
@@ -61,7 +62,7 @@ function Home() {
     useEffect(() => {
         if(updateItem){
             console.log('useEffect update item run')
-
+            setloading(1)
             fetch(`/update${updateItem.id}`, {
             method: 'POST', // or 'PUT'
             headers: {
@@ -72,6 +73,7 @@ function Home() {
             .then(response => response.json())
             .then(data => {
                 // console.log('Success:', data)
+                setloading(0)
             })
             .catch(error => console.error('Error:', error))
             setinput('')
@@ -102,26 +104,25 @@ function Home() {
 
     return (
         <div>
-            <div>
-           <h2> data from server  </h2> 
+            <div className='darkDiv'>
+           <h2 > data from server  </h2> 
            {/* <input value={input} onChange={(e) => setinput(e.target.value)}></input> */}
            <ItemInput input={input} setinput={setinput} ></ItemInput>
           
+            <div className='button'>
+           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} > TRACK </Button>{' '}
+           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} > BOOK </Button>{' '}
+           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'movie'})} > MOVIE </Button>{' '}
+           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'tag'})} > TAG </Button>{' '}
+            </div>
             </div>
 
             <div>
-           <Button onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} variant="outline-primary"> track </Button>{' '}
-           <Button onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} variant="outline-primary"> book </Button>{' '}
-           <Button onClick={() => setnewItem({'user': user, 'title': input, 'type': 'movie'})} variant="outline-primary"> movie </Button>{' '}
-           <Button onClick={() => setnewItem({'user': user, 'title': input, 'type': 'tag'})} variant="outline-primary"> tag </Button>{' '}
-           
-            </div>
-            <div>
-                -
+                {loading? <Spinner animation="border" variant="warning" /> : ''}
             </div>
             
-            <div>     
-            {dataFromServer.map((e, i) => { return <CardDisplay 
+            <div className='displayItemDiv'>
+            {dataFromServer? dataFromServer.map((e, i) => { return <CardDisplay 
             key={i}
             title={e.title}
             type={e.type}
@@ -131,24 +132,12 @@ function Home() {
             onUpdate={setupdateItem}
             input={input}
 
-            ></CardDisplay>})}
+            ></CardDisplay>})
+            :   <Spinner animation="border" variant="warning" />  }
             </div>
 
-            {/* <div>     
-            {dataFromServer.map((e, i) => { return <ListDisplay 
-            key={i}
-            title={e.title}
-            type={e.type}
-            createdAt={e.createdAt}
-            id={e._id}
-            onDelete={setdeleteItem}
-            onUpdate={setupdateItem}
-            input={input}
-
-            ></ListDisplay>})}
-            </div> */}
             <div>
-                -            
+                -       
             </div>
             
         </div>

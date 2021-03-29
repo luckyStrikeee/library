@@ -1,0 +1,10 @@
+.cardDiv {
+    border: 1px solid rgb(0, 162, 255);
+    padding: 1px;
+    margin: 1px;
+    /* background-color: #282c34; */
+    /* color: white; */
+    /* width: 250px; */
+    font-family: Arial;
+    text-align: center;
+  }

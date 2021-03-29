@@ -1,0 +1,35 @@
+.darkDiv {
+    margin: 5px;
+    border: 3px solid  rgb(102, 155, 206);
+    padding: 5px;
+    
+    background-color: #0d1222;
+    color: white;
+    font-family: Arial;
+    text-align: center;
+    /* font-family: Chalkduster, fantasy */
+  }
+  .button {
+    border: 1px solid rgb(102, 155, 206);
+    padding: 5px;
+    margin: 5px;
+    
+    background-color: #0d1222;
+    /* color: white; */
+    /* font-family: American Typewriter, serif */
+  }
+  .displayItemDiv {
+      margin: 5px;
+      border: 3px solid rgb(60, 0, 128);
+      padding: 5px;
+      overflow: auto;
+      
+      /* background-color: #282c34; */
+      /* color: white; */
+      height: 500px;
+      width: 500px;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    
