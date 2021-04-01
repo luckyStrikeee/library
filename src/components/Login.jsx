@@ -1,0 +1,23 @@
+import React, { useState } from 'react'
+
+function Login(props) {
+    const [input, setinput] = useState(null)
+
+    let logout = <div>
+        <input onChange={e => setinput(e.target.value)} placeholder='Enter your email'></input>
+        <button onClick={() => props.onLog(input)}> Login </button>
+    </div>
+
+    let login = <div>
+        <span>{props.user}</span>
+        <button onClick={() => props.onLog(null)}> Logout </button>
+    </div>
+
+    return (
+        <div>
+            {props.user ? login : logout}
+        </div>
+    )
+}
+
+export default Login

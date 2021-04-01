@@ -1,35 +1,88 @@
-.darkDiv {
+.div0 {
     margin: 5px;
     border: 3px solid  rgb(102, 155, 206);
     padding: 5px;
+    
+    background-color: #0d1222;
+}
+.navBar {
+    margin: 1px;
+    border: 1px solid  rgb(206, 182, 102);
+    padding: 0px;
+    
+    color: khaki;
+    font-family: "Goudy Old Style", Garamond, "Big Caslon";
+    /* font-weight: bold; */
+    font-size: 20px;
+}
+
+.navBarOption {
+    border: 0px solid  rgb(206, 182, 102);
+}
+.navBarOption:hover {
+    cursor: pointer;
+}
+.user {
+    float: right;
+}
+.searchDiv {
+    margin: 5px;
+    border: 0px solid  rgb(102, 155, 206);
+    padding: 2px;
     
     background-color: #0d1222;
     color: white;
     font-family: Arial;
     text-align: center;
     /* font-family: Chalkduster, fantasy */
+    animation-name: example;
+    animation-duration: 4s;
   }
-  .button {
-    border: 1px solid rgb(102, 155, 206);
-    padding: 5px;
-    margin: 5px;
+
+@keyframes example {
+  from {background-color: #4e6dd1;}
+  to {background-color: #0d1222;}
+}
+  .buttonDiv {
+    /* border: 1px solid rgb(102, 155, 206); */
+    padding: 2px;
+    margin: 2px;
     
-    background-color: #0d1222;
+    background-color: inherit;
     /* color: white; */
     /* font-family: American Typewriter, serif */
   }
+  .button {
+    margin: 1px;
+    border: 1px solid  rgb(255, 255, 255);
+    padding: 2px;
+    background-color:rgb(44, 70, 105);
+    color: white;
+    /* border-radius: 12px;  */
+    width: 150px;
+
+  }
+  .button:hover {
+    box-shadow: 0 12px 16px 0 rgba(230, 223, 125, 0.445),0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color:rgb(87, 148, 228);
+  }
   .displayItemDiv {
-      margin: 5px;
-      border: 3px solid rgb(60, 0, 128);
+      margin: auto;
+      border: 1px solid rgb(255, 255, 255);
       padding: 5px;
-      overflow: auto;
       
       /* background-color: #282c34; */
       /* color: white; */
-      height: 500px;
+      /* height: 400px; */
+      max-height: 500px;
       width: 500px;
       font-family: Arial;
       text-align: center;
+      overflow: scroll;
     }
+    
+    .displayItemDiv::-webkit-scrollbar { 
+        display: none;
+      } 
 
     

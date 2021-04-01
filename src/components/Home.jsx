@@ -1,9 +1,9 @@
 import React, { useState , useEffect} from 'react'
-import Button from 'react-bootstrap/Button'
 import ItemInput from './ItemInput'
 import CardDisplay from './CardDisplay'
 import Spinner from 'react-bootstrap/Spinner'
 import './Home.css'
+import Login from './Login'
 
 
 function Home() {
@@ -15,13 +15,16 @@ function Home() {
     const [updateItem,setupdateItem] = useState(null)
     const [deleteItem, setdeleteItem] = useState(null)
     const [loading, setloading] = useState(0)
-    let user = 'myUser'
+    const [filterType, setfilterType] = useState(null)
+    const [loginInput, setloginInput] = useState(null)
+    const [user, setuser] = useState('myUser')
+    const itemType = ['track', 'book', 'movie', 'tag']
 
     useEffect(() => {
         
         if(getList){
             console.log('useEffect display list run')
-            fetch('/list')
+            fetch(`/list${user}`)
             .then(response => response.json())
             .then(data => {
                 // console.log(data[0]._id)
@@ -101,19 +104,37 @@ function Home() {
      
     }, [deleteItem])
 
+    useEffect(() => {
+        setgetList(1)
+    }, [user])
+
 
     return (
-        <div>
-            <div className='darkDiv'>
-           <h2 > data from server  </h2> 
+        <div className='div0'>
+            <div className='navBar'>
+                <span className='navBarOption'>Home</span>{' - '}
+                <span className='navBarOption'>Library</span>{' - '}
+                <span className='navBarOption'>Statistics</span>{'  '}
+                <Login className='navBarOption'
+                user={user}
+                onLog={setuser}
+                ></Login>
+
+            </div>
+            <div className='searchDiv'>
+           {/* <h2 > data from server  </h2>  */}
            {/* <input value={input} onChange={(e) => setinput(e.target.value)}></input> */}
            <ItemInput input={input} setinput={setinput} ></ItemInput>
           
-            <div className='button'>
-           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} > TRACK </Button>{' '}
-           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} > BOOK </Button>{' '}
-           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'movie'})} > MOVIE </Button>{' '}
-           <Button variant="light" onClick={() => setnewItem({'user': user, 'title': input, 'type': 'tag'})} > TAG </Button>{' '}
+            <div className='buttonDiv'>
+                <button onClick={() => console.log(filterType)}>debugging</button>
+            {itemType.map((e) => {
+               return <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': e})} > {e} </button>
+            })}
+           {/* <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} > TRACK </button>{' '}
+           <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} > BOOK </button>{' '}
+           <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'movie'})} > MOVIE </button>{' '}
+           <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'tag'})} > TAG </button>{' '} */}
             </div>
             </div>
 
@@ -122,7 +143,13 @@ function Home() {
             </div>
             
             <div className='displayItemDiv'>
-            {dataFromServer? dataFromServer.map((e, i) => { return <CardDisplay 
+                <select className='slide' onChange={(e) => setfilterType(e.target.value)}>
+                    <option> All</option>
+                    {itemType.map((e, i) => <option key={i} value={e} > {e} </option>)}
+
+                </select>
+            {dataFromServer? dataFromServer.filter(f => itemType.includes(filterType) ? f.type === filterType && f.user === user : f.user === user)
+            .map((e, i) => { return <CardDisplay 
             key={i}
             title={e.title}
             type={e.type}
