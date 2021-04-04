@@ -9,7 +9,7 @@ function Login(props) {
     </div>
 
     let login = <div>
-        <span>{props.user}</span>
+        <span>{props.user}</span><br></br>
         <button onClick={() => props.onLog(null)}> Logout </button>
     </div>
 

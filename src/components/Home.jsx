@@ -14,11 +14,10 @@ function Home() {
     const [newItem,setnewItem] = useState(null)
     const [updateItem,setupdateItem] = useState(null)
     const [deleteItem, setdeleteItem] = useState(null)
-    const [loading, setloading] = useState(0)
+    const [loading, setloading] = useState(0) // spinner
     const [filterType, setfilterType] = useState(null)
-    const [loginInput, setloginInput] = useState(null)
     const [user, setuser] = useState('myUser')
-    const itemType = ['track', 'book', 'movie', 'tag']
+    const itemType = ['track', 'book', 'movie', 'tag', 'quote']
 
     useEffect(() => {
         
@@ -50,10 +49,10 @@ function Home() {
             .then(response => response.json())
             .then(data => {
                 // console.log('Success:', data)
+                setgetList(1)
             })
             .catch(error => console.error('Error:', error))
             setinput('')
-            setgetList(1)
             setnewItem(null)
         }
         // else{
@@ -105,7 +104,8 @@ function Home() {
     }, [deleteItem])
 
     useEffect(() => {
-        setgetList(1)
+        // getList? setgetList(0) : setgetList(1)
+        setgetList(!getList)
     }, [user])
 
 
@@ -127,9 +127,9 @@ function Home() {
            <ItemInput input={input} setinput={setinput} ></ItemInput>
           
             <div className='buttonDiv'>
-                <button onClick={() => console.log(filterType)}>debugging</button>
-            {itemType.map((e) => {
-               return <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': e})} > {e} </button>
+                <button onClick={() => console.log(getList, user, dataFromServer)}>debugging</button>
+            {itemType.filter(() => input && user).map((e) => {
+               return <button className='button' disabled={!(input && user)} onClick={() => setnewItem({'user': user, 'title': input, 'type': e})} > {e} </button>
             })}
            {/* <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} > TRACK </button>{' '}
            <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} > BOOK </button>{' '}
@@ -143,11 +143,15 @@ function Home() {
             </div>
             
             <div className='displayItemDiv'>
+              
                 <select className='slide' onChange={(e) => setfilterType(e.target.value)}>
                     <option> All</option>
                     {itemType.map((e, i) => <option key={i} value={e} > {e} </option>)}
 
                 </select>
+                
+                
+            
             {dataFromServer? dataFromServer.filter(f => itemType.includes(filterType) ? f.type === filterType && f.user === user : f.user === user)
             .map((e, i) => { return <CardDisplay 
             key={i}
