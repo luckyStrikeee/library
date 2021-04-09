@@ -16,7 +16,7 @@ function Home() {
     const [deleteItem, setdeleteItem] = useState(null)
     const [loading, setloading] = useState(0) // spinner
     const [filterType, setfilterType] = useState(null)
-    const [user, setuser] = useState('myUser')
+    const [user, setuser] = useState('1')
     const itemType = ['track', 'book', 'movie', 'tag', 'quote']
 
     useEffect(() => {
@@ -32,7 +32,7 @@ function Home() {
         setgetList(0)
         }
         
-    }, [getList])
+    }, [getList, user])
 
     useEffect(() => {
         
@@ -49,17 +49,17 @@ function Home() {
             .then(response => response.json())
             .then(data => {
                 // console.log('Success:', data)
-                setgetList(1)
             })
             .catch(error => console.error('Error:', error))
             setinput('')
             setnewItem(null)
+            dataFromServer.push(newItem)
         }
         // else{
         //     console.log('no data to send to server')
         // }
 
-    }, [newItem])
+    }, [newItem, dataFromServer])
     
     useEffect(() => {
         if(updateItem){
@@ -79,14 +79,16 @@ function Home() {
             })
             .catch(error => console.error('Error:', error))
             setinput('')
-            setgetList(1)
+            // setgetList(1)
+            // console.log(updateItem.id)
+            dataFromServer[dataFromServer.indexOf(dataFromServer.filter(e => e['item_id'] === updateItem.id)[0])]["title"] = updateItem.title
             setupdateItem(null)
         }
         // else{
         //     console.log('no data to send to server')
         // }
 
-    }, [updateItem])
+    }, [updateItem, dataFromServer])
 
 
     useEffect(() => {
@@ -95,29 +97,33 @@ function Home() {
             fetch(`/list${deleteItem}`, { method: 'DELETE' })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('deleted')
+                    // console.log('deleted')
                 })
                 .catch(error => console.error('Error:', error))
-        setgetList(1)       
+            
+            // dataFromServer.splice(dataFromServer.indexOf(deleteItem, 1)) // need to fix this line whose return -1
+            // console.log(dataFromServer.indexOf(dataFromServer.filter(e => e['item_id'] === deleteItem)[0]))
+            dataFromServer.splice(dataFromServer.indexOf(dataFromServer.filter(e => e['item_id'] === deleteItem)[0]),1)
+            setdeleteItem(null)
         }
      
-    }, [deleteItem])
+    }, [deleteItem, dataFromServer])
 
-    useEffect(() => {
-        // getList? setgetList(0) : setgetList(1)
-        setgetList(!getList)
-    }, [user])
 
 
     return (
+        
         <div className='div0'>
+            {/* {console.log('render')} */}
             <div className='navBar'>
                 <span className='navBarOption'>Home</span>{' - '}
                 <span className='navBarOption'>Library</span>{' - '}
                 <span className='navBarOption'>Statistics</span>{'  '}
                 <Login className='navBarOption'
                 user={user}
-                onLog={setuser}
+                setuser={setuser}
+                getList={getList}
+                setgetList={setgetList}
                 ></Login>
 
             </div>
@@ -127,9 +133,10 @@ function Home() {
            <ItemInput input={input} setinput={setinput} ></ItemInput>
           
             <div className='buttonDiv'>
-                <button onClick={() => console.log(getList, user, dataFromServer)}>debugging</button>
-            {itemType.filter(() => input && user).map((e) => {
-               return <button className='button' disabled={!(input && user)} onClick={() => setnewItem({'user': user, 'title': input, 'type': e})} > {e} </button>
+                <button onClick={() => console.log(dataFromServer)}>debugging</button>
+                <button onClick={() => console.log(dataFromServer.filter(e => e["title"] === "111")[0])}> debugging2</button>
+            {itemType.filter(() => input && user).map((e, i) => {
+               return <button className='button' key={i} disabled={!(input && user)} onClick={() => setnewItem({'user': user, 'title': input, 'type': e, 'item_id': Date.now()})} > {e} </button>
             })}
            {/* <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'track'})} > TRACK </button>{' '}
            <button className='button' onClick={() => setnewItem({'user': user, 'title': input, 'type': 'book'})} > BOOK </button>{' '}
@@ -158,7 +165,7 @@ function Home() {
             title={e.title}
             type={e.type}
             createdAt={e.createdAt}
-            id={e._id}
+            id={e.item_id}
             onDelete={setdeleteItem}
             onUpdate={setupdateItem}
             input={input}

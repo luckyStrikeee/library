@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import ItemUpdate from './ItemUpdate'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import Badge from 'react-bootstrap/Badge'
 import './CardDisplay.css'
 
 function CardDisplay(props) {
@@ -43,7 +42,7 @@ function CardDisplay(props) {
             
             <Card.Body className='cardBody'>
                 
-                <Card.Title className='title' onClick={() => setsetupClicked(!setupClicked)}> {props.title} 
+                <Card.Title className='title' onClick={() => setsetupClicked(!setupClicked)}> {props.title}
                 
                 </Card.Title> <span className='badge'>{props.type}</span>
                 {/* <Badge className='badge' pill variant="warning">{props.type}</Badge> */}

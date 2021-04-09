@@ -10,7 +10,7 @@ function ItemUpdate(props) {
            <input value={input} onChange={(e) => setinput(e.target.value)}></input>
             <div>
                 <Button size='sm' onClick={() => {
-                    props.onUpdate({id:props.id, title: input})
+                    props.onUpdate({id: props.id, title: input})
                     props.onCancel(0)
                     }}  > save </Button>{' '}
                 <Button size='sm' onClick={() => props.onCancel(0)}> cancel </Button>
